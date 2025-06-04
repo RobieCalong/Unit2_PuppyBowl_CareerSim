@@ -1,0 +1,37 @@
+body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.div-divide-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.puppy-roster {
+    background-color: pink;
+    width: 50%;
+}
+.grid-puppy-list {
+    display: grid;
+    /* grid-template-rows: 1fr 1fr; */
+    /* align-items: center; */
+}
+.puppy-name {
+    border: 2px solid black ;
+    border-radius: 20px;
+    background-color: white;
+    padding: 10px;
+    padding-left: 40px;
+    margin: 10px;
+    text-align: left;
+    font-size: 30px;
+}
+
+
+
+
+.puppy-details {
+    background-color: orange;
+    width: 50%;
+}
