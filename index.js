@@ -11,6 +11,11 @@ players object
 "teamId": 456
 */
 
+//dog pic Ducan
+//https://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_49/cw_1012/ch_1518/APL/uploads/2020/01/Duncan-PBXVI-v2.jpg
+//from this website
+//https://puppybowl-react-gl.netlify.app/
+
 //static data for testing purposes
 const state = {
     dogs: [],
@@ -87,7 +92,7 @@ function renderPuppyDetails(dog) {
     const dogContainerDetails = document.querySelector('.dog-container')
 
     const img = document.createElement('img')
-    img.src = "./assests/Crumpet-PBXVI.jpg";
+    img.src = `${dog.imageUrl}`;
 
     const dogBio = document.createElement('div')
     const name = document.createElement("span")
@@ -114,10 +119,66 @@ function renderPuppyDetails(dog) {
     // console.dir(dogContainerDetails)
 }
 
+/*
+players object
+"name": "Crumpet",
+"breed": "American Staffordshire Terrier",
+"status": "bench",
+"imageUrl": "http://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_0/cw_1012/ch_1518/APL/uploads/2019/12/Crumpet-PBXVI.jpg",
+"teamId": 456,
+"cohortId": 2503
+*/
+async function processFormData() {
+  const form = document.querySelector("#form-puppy-invite");
+
+  //static data
+  const staticData = {
+    name: "BrownyJames",
+    breed: "BrownKind",
+    status: "field",
+    imageUrl:
+      "https://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_49/cw_1012/ch_1518/APL/uploads/2020/01/Duncan-PBXVI-v2.jpg",
+    teamId: 281,
+    cohortId: 2503,
+  };
+  //returns an array of key value pair
+  // console.log(Object.entries(staticData))
+
+  const formData = new FormData();
+
+  for (let [key, value] of Object.entries(staticData)) {
+    formData.append(`${key}`, `${value}`);
+  }
+  //console formData key/value pair
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key} : ${value}`);
+  }
+
+  //API https://fsa-puppy-bowl.herokuapp.com/api/#tag/Players/paths/~1players/post
+  //does not accept formData so i have to convert it to jsonData
+  const jsonData = Object.fromEntries(formData.entries());
+
+  await passFormData(jsonData);
+}
+async function passFormData(jsonData) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      // body: formData,
+      body: JSON.stringify(jsonData),
+      headers: {"Content-Type": "application/json"},
+    });
+
+    console.log(await response.json());
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 
  async function initialize() {
-     await getAllDogs();
- 
+  //  await processFormData()
+   await getAllDogs();
 }
 
 initialize()
