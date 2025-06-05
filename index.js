@@ -20,6 +20,19 @@ const state = {
     }
 }
 
+window.addEventListener('hashchange', selectDog)
+
+function selectDog() {
+  const id = window.location.hash.replace('#', '')
+  console.log(id)
+
+  const sDog = state.dogsData.find((dog) => dog.id == id)
+
+  console.log(typeof sDog)
+
+  renderPuppyDetails(sDog)
+}
+
 async function getAllDogs() {
     try {
         const response = await fetch(`${API_URL}`)
@@ -41,7 +54,7 @@ async function getAllDogs() {
     }
 }
 
-async function renderAllDogs() {
+function renderAllDogs() {
     const puppyRosterContainer = document.querySelector('.puppy-roster')
 
     const { dogsData } = state
@@ -50,13 +63,51 @@ async function renderAllDogs() {
     dogsData.forEach((dog) => {
       const dogDiv = document.createElement("div");
       dogDiv.classList.add("puppy-name");
-      console.dir(dogDiv);
+    //   console.dir(dogDiv);
+      // dogDiv.href = ""
+      // dogDiv.href = `#${dog.id}`;
+      dogDiv.addEventListener('click', () => {
+        // state.dog = dog
+        // dogDiv.href = `#${dog.id}`
+        window.location.hash = dog.id
+        console.log(window.location.hash)
+        // console.log(dogDiv.href)
+        renderPuppyDetails(dog);
+      })
       dogDiv.innerText = `${dog.name}`;
 
       puppyRosterContainer.append(dogDiv);
     });
     console.log(puppyRosterContainer)
 }
+
+function renderPuppyDetails(dog) {
+    const dogContainerDetails = document.querySelector('.dog-container')
+
+    const img = document.createElement('img')
+    img.src = "./assests/Crumpet-PBXVI.jpg";
+
+    const dogBio = document.createElement('div')
+    const name = document.createElement("span")
+    const breed = document.createElement("span")
+    const status = document.createElement("span")
+    const teamId = document.createElement("span")
+    name.innerText = `Name: ${dog.name}`
+    breed.innerText = `Breed: ${dog.breed}`
+    status.innerText = `Status: ${dog.status}`
+    teamId.innerText = `teamId: ${dog.teamId}`
+    dogBio.classList.add('dog-bio')
+    dogBio.append(name, breed, status, teamId)
+
+    const closeButton = document.createElement('a')
+    closeButton.classList.add('close-button')
+    closeButton.innerText = 'Close'
+    closeButton.href = ""
+
+    dogContainerDetails.replaceChildren(img, dogBio, closeButton)
+    // console.dir(dogContainerDetails)
+}
+
 
  async function initialize() {
      await getAllDogs();
