@@ -63,6 +63,7 @@ h1 {
 }
 img {
     max-width: 400px;
+    place-self: center;
 }
 .dog-bio {
     display: grid;
@@ -100,6 +101,9 @@ form div{
     display: grid;
     grid-template-columns: auto 1fr;
     width: 800px;
+}
+div span {
+    font-size: 30px;
 }
 #button-submit {
     place-self: center;

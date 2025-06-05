@@ -22,15 +22,21 @@ const state = {
 
 window.addEventListener('hashchange', selectDog)
 
+//display specific dog based on #id :: example #1002939
 function selectDog() {
-  const id = window.location.hash.replace('#', '')
-  console.log(id)
+  //id will just be a number excluding the #sign
+  const id = window.location.hash.replace("#", "");
+  console.log(id);
 
-  const sDog = state.dogsData.find((dog) => dog.id == id)
+  //if id is empty display no dog
+  if (!id) {
+    document.querySelector(".dog-container").innerHTML = "";
+  } else {
+    const sDog = state.dogsData.find((dog) => dog.id == id);
+    console.log(typeof sDog);
 
-  console.log(typeof sDog)
-
-  renderPuppyDetails(sDog)
+    renderPuppyDetails(sDog);
+  }
 }
 
 async function getAllDogs() {
@@ -63,15 +69,11 @@ function renderAllDogs() {
     dogsData.forEach((dog) => {
       const dogDiv = document.createElement("div");
       dogDiv.classList.add("puppy-name");
-    //   console.dir(dogDiv);
-      // dogDiv.href = ""
-      // dogDiv.href = `#${dog.id}`;
       dogDiv.addEventListener('click', () => {
-        // state.dog = dog
-        // dogDiv.href = `#${dog.id}`
+        //set the hash property with dog.id
         window.location.hash = dog.id
         console.log(window.location.hash)
-        // console.log(dogDiv.href)
+
         renderPuppyDetails(dog);
       })
       dogDiv.innerText = `${dog.name}`;
@@ -102,7 +104,11 @@ function renderPuppyDetails(dog) {
     const closeButton = document.createElement('a')
     closeButton.classList.add('close-button')
     closeButton.innerText = 'Close'
-    closeButton.href = ""
+    // sets the hash to empty when you click the closeButton to simulate going to homepage
+    closeButton.addEventListener('click', () => {
+      window.location.hash = ''
+      // console.log(window.location.hash); 
+    })
 
     dogContainerDetails.replaceChildren(img, dogBio, closeButton)
     // console.dir(dogContainerDetails)
