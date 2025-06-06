@@ -45,6 +45,7 @@ function selectDog() {
   }
 }
 
+//CRUD operation GET using fetch API
 async function getAllDogs() {
     try {
         const response = await fetch(`${API_URL}`)
@@ -59,13 +60,13 @@ async function getAllDogs() {
         //display 2nd dog
         console.log(state.dogsData)
 
-
         renderAllDogs()
     } catch (error) {
         console.log(error.message)
     }
 }
 
+//display all dogs in the roster section
 function renderAllDogs() {
     const puppyRosterContainer = document.querySelector('.puppy-roster')
     //re-sets the puppy roster to empty
@@ -76,21 +77,38 @@ function renderAllDogs() {
 
     dogsData.forEach((dog) => {
       const dogDiv = document.createElement("div");
-      dogDiv.classList.add("puppy-name");
-      dogDiv.addEventListener('click', () => {
+      dogDiv.classList.add("dog-div");
+
+      const puppyName = document.createElement('div')
+      puppyName.classList.add("puppyName")
+      puppyName.addEventListener("click", () => {
         //set the hash property with dog.id
-        window.location.hash = dog.id
-        console.log(window.location.hash)
+        window.location.hash = dog.id;
+        console.log(window.location.hash);
 
         renderPuppyDetails(dog);
+      });
+      puppyName.innerText = `${dog.name}`;
+
+      const puppyRemove = document.createElement('div')
+      puppyRemove.classList.add("puppyRemove")
+      puppyRemove.addEventListener('click', async () => {
+        console.log('remove puppy')
+        console.log(dog.id)
+        console.log(this)
+        await removeDog(dog.id)
       })
-      dogDiv.innerText = `${dog.name}`;
+      puppyRemove.innerText = "REMOVE"
+
+      dogDiv.append(puppyName)
+      dogDiv.append(puppyRemove)
 
       puppyRosterContainer.append(dogDiv);
     });
     console.log(puppyRosterContainer)
 }
 
+//display on the right section a specific dog details 
 function renderPuppyDetails(dog) {
     const dogContainerDetails = document.querySelector('.dog-container')
 
@@ -122,19 +140,11 @@ function renderPuppyDetails(dog) {
     // console.dir(dogContainerDetails)
 }
 
-/*
-players object
-"name": "Crumpet",
-"breed": "American Staffordshire Terrier",
-"status": "bench",
-"imageUrl": "http://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_0/cw_1012/ch_1518/APL/uploads/2019/12/Crumpet-PBXVI.jpg",
-"teamId": 456,
-"cohortId": 2503
-*/
+//collects data input from Form for POST CRUD operation
 async function processFormData() {
   const form = document.querySelector("#form-puppy-invite");
 
-  // //static data
+  //                              //static data for TESTING purposes
   // const staticData = {
   //   name: "BrownyJames",
   //   breed: "BrownKind",
@@ -157,13 +167,6 @@ async function processFormData() {
   //   console.log(`${key} : ${value}`);
   // }
 
-  // const name = document.querySelector('#name').value
-  // const breed = document.querySelector('#breed').value
-  // const status = document.querySelector('#status').value
-  // const imageUrl = document.querySelector('#imageUrl').value
-  // const teamId = document.querySelector('#teamId').value
-  // const cohortId = document.querySelector('#cohortId').value
-
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault()
 
@@ -175,7 +178,7 @@ async function processFormData() {
       const jsonData = Object.fromEntries(formData.entries());
     
       await passFormDataToPOST(jsonData);
-      await getAllDogs()
+      
     } catch (error) {
       console.log(error.message)
     }
@@ -190,13 +193,37 @@ async function passFormDataToPOST(jsonData) {
       body: JSON.stringify(jsonData),
       headers: {"Content-Type": "application/json"},
     });
-
     // console.log(await response.json());
+
+    await getAllDogs();
+
   } catch (error) {
     console.log(error.message);
   }
 }
 
+//CRUD operation for DELETE dog
+async function removeDog(id) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+    })
+
+    if(!response.ok) {
+      console.log(response.error)
+    }
+
+    //checks status of fetch
+    console.log(response.status)
+    console.log("removed dog successful")
+
+    //when 'DELETE' dog is successful; it fetches all dogs and renders
+    await getAllDogs()
+
+  } catch (error) {
+    console.log(error.message)
+  }
+}
 
  async function initialize() {
    await processFormData()

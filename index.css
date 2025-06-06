@@ -6,6 +6,8 @@ body {
 h1, h2{
     display: grid;
     justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 2px;
 }
 @keyframes flashing {
     from {color: red; background-color: rgb(255, 255, 255);}
@@ -40,15 +42,27 @@ h1 {
     /* align-items: center; */
     /* padding-bottom: 40px;     */
 }
-.puppy-name {
+.dog-div {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+}
+.puppyName {
     border: 2px solid black ;
     border-radius: 20px;
     background-color: white;
+    margin: 10px;
     padding: 10px;
     padding-left: 40px;
-    margin: 10px;
     text-align: left;
-    font-size: 30px;
+}
+.puppyRemove {
+    border: 2px solid black ;
+    border-radius: 20px;
+    background-color: rgba(194, 1, 1, 0.469);
+    margin-right: 10px;
+    padding: 10px;
+    color: white;
+    place-self: center;
 }
 
 
