@@ -8,32 +8,37 @@ h1, h2{
     justify-content: center;
 }
 @keyframes flashing {
-    from {color: red;}
-    to {color: black;}
+    from {color: red; background-color: rgb(255, 255, 255);}
+    to {color: rgb(113, 125, 137); background-color: aqua;}
 }
 h1 {
-    color: red;
+    color: red; 
     animation-name: flashing;
     animation-duration: 3s;
     animation-iteration-count: infinite;
-    
+    border: 1px solid black;
+    border-radius: 20px;
+    margin: 0px;
+    padding-bottom: 10px;
+    width: 400px;
+    place-self: center;
 }
 
 .div-divide-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     /* height: 100%; */
 }
 
 .puppy-roster {
     background-color: pink;
-    width: 50%;
+    width: 100%;
 }
 .grid-puppy-list {
     display: grid;
     /* grid-template-rows: 1fr 1fr; */
     /* align-items: center; */
-    padding-bottom: 40px;
+    /* padding-bottom: 40px;     */
 }
 .puppy-name {
     border: 2px solid black ;
@@ -49,7 +54,7 @@ h1 {
 
 .puppy-details {
     background-color: orange;
-    width: 50%;
+    width: 100%;
     justify-content: center;
     align-items: center;
 }

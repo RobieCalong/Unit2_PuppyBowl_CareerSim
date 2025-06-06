@@ -31,14 +31,15 @@ window.addEventListener('hashchange', selectDog)
 function selectDog() {
   //id will just be a number excluding the #sign
   const id = window.location.hash.replace("#", "");
-  console.log(id);
+  // console.log(id);
 
   //if id is empty display no dog
   if (!id) {
     document.querySelector(".dog-container").innerHTML = "";
   } else {
     const sDog = state.dogsData.find((dog) => dog.id == id);
-    console.log(typeof sDog);
+    // console.log(typeof sDog);
+    state.dog = sDog
 
     renderPuppyDetails(sDog);
   }
@@ -52,7 +53,7 @@ async function getAllDogs() {
         // const data = json.data           
         //can also be written using de-structuring
         const { data } = json
-        console.log(data)
+        // console.log(data)
 
         state.dogsData = data.players
         //display 2nd dog
@@ -67,9 +68,11 @@ async function getAllDogs() {
 
 function renderAllDogs() {
     const puppyRosterContainer = document.querySelector('.puppy-roster')
+    //re-sets the puppy roster to empty
+    puppyRosterContainer.innerHTML = ""
 
     const { dogsData } = state
-    console.log(dogsData);
+    // console.log(dogsData);
 
     dogsData.forEach((dog) => {
       const dogDiv = document.createElement("div");
@@ -131,36 +134,55 @@ players object
 async function processFormData() {
   const form = document.querySelector("#form-puppy-invite");
 
-  //static data
-  const staticData = {
-    name: "BrownyJames",
-    breed: "BrownKind",
-    status: "field",
-    imageUrl:
-      "https://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_49/cw_1012/ch_1518/APL/uploads/2020/01/Duncan-PBXVI-v2.jpg",
-    teamId: 281,
-    cohortId: 2503,
-  };
-  //returns an array of key value pair
-  // console.log(Object.entries(staticData))
+  // //static data
+  // const staticData = {
+  //   name: "BrownyJames",
+  //   breed: "BrownKind",
+  //   status: "field",
+  //   imageUrl:
+  //     "https://r.ddmcdn.com/w_1012/s_f/o_1/cx_0/cy_49/cw_1012/ch_1518/APL/uploads/2020/01/Duncan-PBXVI-v2.jpg",
+  //   teamId: 281,
+  //   cohortId: 2503,
+  // };
+  // //returns an array of key value pair
+  // // console.log(Object.entries(staticData))
 
-  const formData = new FormData();
+  // const formData = new FormData();
 
-  for (let [key, value] of Object.entries(staticData)) {
-    formData.append(`${key}`, `${value}`);
-  }
-  //console formData key/value pair
-  for (let [key, value] of formData.entries()) {
-    console.log(`${key} : ${value}`);
-  }
+  // for (let [key, value] of Object.entries(staticData)) {
+  //   formData.append(`${key}`, `${value}`);
+  // }
+  // //console formData key/value pair
+  // for (let [key, value] of formData.entries()) {
+  //   console.log(`${key} : ${value}`);
+  // }
 
-  //API https://fsa-puppy-bowl.herokuapp.com/api/#tag/Players/paths/~1players/post
-  //does not accept formData so i have to convert it to jsonData
-  const jsonData = Object.fromEntries(formData.entries());
+  // const name = document.querySelector('#name').value
+  // const breed = document.querySelector('#breed').value
+  // const status = document.querySelector('#status').value
+  // const imageUrl = document.querySelector('#imageUrl').value
+  // const teamId = document.querySelector('#teamId').value
+  // const cohortId = document.querySelector('#cohortId').value
 
-  await passFormData(jsonData);
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault()
+
+    try {
+      const formData = new FormData(form)
+    
+      //API https://fsa-puppy-bowl.herokuapp.com/api/#tag/Players/paths/~1players/post
+      //does not accept formData so i have to convert it to jsonData
+      const jsonData = Object.fromEntries(formData.entries());
+    
+      await passFormDataToPOST(jsonData);
+      await getAllDogs()
+    } catch (error) {
+      console.log(error.message)
+    }
+  })
+
 }
-async function passFormData(jsonData) {
+async function passFormDataToPOST(jsonData) {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -169,7 +191,7 @@ async function passFormData(jsonData) {
       headers: {"Content-Type": "application/json"},
     });
 
-    console.log(await response.json());
+    // console.log(await response.json());
   } catch (error) {
     console.log(error.message);
   }
@@ -177,7 +199,7 @@ async function passFormData(jsonData) {
 
 
  async function initialize() {
-  //  await processFormData()
+   await processFormData()
    await getAllDogs();
 }
 
