@@ -1,3 +1,9 @@
+import { sum, verifyName } from "./input.js";
+
+//FOR TESTING PURPOSES for setting up jest
+const result = sum(1,2)
+// console.log(result)
+
 const API_URL =
   "https://fsa-puppy-bowl.herokuapp.com/api/2503-ftb-et-web-am/players";
 
@@ -173,6 +179,12 @@ async function processFormData() {
     try {
       const formData = new FormData(form)
     
+      //get form name value and verify if its a string
+      const name = formData.get('name')
+      // console.log("name of dog: " +  name)
+      const valueToF = verifyName(name)
+      // console.log("valueToF is: " + valueToF)
+
       //API https://fsa-puppy-bowl.herokuapp.com/api/#tag/Players/paths/~1players/post
       //does not accept formData so i have to convert it to jsonData
       const jsonData = Object.fromEntries(formData.entries());
